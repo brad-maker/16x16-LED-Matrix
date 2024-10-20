@@ -22,4 +22,8 @@ to the ESP with either your mobile phone or computer to load the Webpage for ani
 
 Enhancements to come.
 
-The LED Control webpage code is VERY basic for now as I'm concentrating on the Arduino Sketch file 1st. This file MUST be located inside a folder called 'data' as a sub-directory of your Arduino Project Folder. This is where the ESP32 sketch data upload plugin expects to find it. The ESP32 sketch data upload plugin will then upload it to the appropriate directory on your ESP32.
+The LED Control webpage code is VERY basic for now as I'm concentrating on the Arduino Sketch file first. 
+
+This file MUST be located inside a folder called 'data' as a sub-directory of your Arduino Project Folder. 
+
+This is where the ESP32 sketch data upload plugin expects to find it. The ESP32 sketch data upload plugin will then upload it to the appropriate directory on your ESP32.
