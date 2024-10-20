@@ -5,7 +5,9 @@ The reault was a working version that was more than a little touchy. I'd also us
 I'm no programmer only ever doing small things with plenty of reading help. This code is roughly now made up of:
 
 2% Brainy Bits Code
+
 60% My Code
+
 38% ChatGPT Code
 
 This is my WIP 16 x 16 RGB LED MAtrix build I've done using an ESP32 WROOM Devlelopment Board
