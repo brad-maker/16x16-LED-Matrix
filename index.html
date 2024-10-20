@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ESP32 Control</title>
+<style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        button { padding: 15px 30px; margin: 10px; font-size: 16px; }
+    </style>
+
+</head>
+<body>
+    <h1>LED Panel Control</h1>
+
+    <div>
+    <label for="brightness">Brightness:</label>
+    <input type="range" id="brightness" min="0" max="255" value="15" onchange="setBrightness(this.value)">
+    <span id="brightnessValue">15</span>
+    </div>
+<br>
+<br>
+<br>
+    <button onclick="setAnimation('solidred')">Red Panel</button><br>
+    <button onclick="setAnimation('solidgreen')">Green Panel</button><br>
+    <button onclick="setAnimation('solidblue')">Blue Panel</button><br>
+    <button onclick="setAnimation('arcadesprites')">Arcade Sprites</button><br>
+    <button onclick="setAnimation('rainbow')">Rainbow Effect</button><br>
+    <button onclick="setAnimation('fireEffect')">Fire Effect</button><br>
+    <button onclick="setAnimation('twinkle')">Twinkle Effect</button><br>
+    <button onclick="setAnimation('colorwipe')">Colour Wipe</button><br>
+    <button onclick="setAnimation('plasma')">Plasma Effect</button><br>
+    <button onclick="setAnimation('bouncingball')">Bouncing Ball</button><br>
+    <button onclick="setAnimation('meteoreffect')">Meteor Effect</button><br>
+    <button onclick="setAnimation('waveeffect')">Wave Effect</button><br>
+    <button onclick="setAnimation('conwaysGameOfLife')">Game Of Life</button><br>
+    <button onclick="setAnimation('fireworksEffect')">Fireworks</button><br>
+    <button onclick="setAnimation('raineffect')">Rain</button><br>
+    <button onclick="setAnimation('matrixCodeRain')">Matrix</button><br>
+    <button onclick="setAnimation('rotatingLines')">Rotating Lines</button><br>
+    <button onclick="setAnimation('circularSpin')">Circular Spin</button><br>
+
+
+    <button onclick="powerOff()">Power Off</button><br>
+
+    <script>
+
+        function setBrightness(value) {
+        document.getElementById('brightnessValue').innerText = value;
+            fetch(`/setBrightness?brightness=${value}`);
+        }
+
+        function setAnimation(animation) {
+            fetch(`/setAnimation?animation=${animation}`)
+                .then(response => response.text())
+                .then(data => alert(data))
+                .catch(error => console.error('Error:', error));
+        }
+
+        function powerOff() {
+            fetch('/poweroff')
+                .then(response => response.text())
+                .then(data => alert(data))
+                .catch(error => console.error('Error:', error));
+        }
+    
+</script>
+</body>
+</html>
+
