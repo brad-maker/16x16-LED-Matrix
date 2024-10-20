@@ -1,4 +1,4 @@
-This is my WIP code for a 16 x 16 RGB LED MAtrix build I've done using an ESP32 WROOM
+This is my WIP code for a 16 x 16 RGB LED MAtrix build I've done using an ESP32 WROOM Devlelopment Board
 
 The file currently includes 18 selectable Animation effects with break code for new selections. 
 
@@ -10,7 +10,7 @@ Modules include:
 #include <SPIFFS.h> //Includes Arduino File Storage function
 #include <FastLED.h> //Includes the FastLED Module for RGB light controls
 
-The Arcade Sprite Animation routine currently has around 40 different animation running in a loop so it can take a while to see all sprites.
+The Arcade Sprite Animation routine currently has around 40 different animations running in a loop so it can take a while to see all sprites.
 I am in the process of adding more and always tweaking the code for speed. The animations were built in a stop go style inside excel so
 that the RGB Colour values would be generated automatically in the appropriate array format for pasting into the Arduino IDE.
 
