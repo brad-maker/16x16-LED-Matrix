@@ -2,6 +2,8 @@ This is my WIP code for a 16 x 16 RGB LED MAtrix build I've done using an ESP32 
 
 The file currently includes 18 selectable Animation effects with break code for new selections. 
 
+NOTE: You must use Arduino IDE version less than version 2.0 as the modules being used have not been ported to the new format and when they have been are not complete. I'm currently using 1.8.19. You can have both versions installed side by side like I have
+
 Modules include:
 
 #include <WiFi.h> //Includes the default Arduino WiFi Library
@@ -18,4 +20,6 @@ The current code puts the ESP32 development board into AP mode for WiFi. This is
 insecure. Furthermore the current model I have won't connect to 5ghz and my home network is problematic with that. You can then connect
 to the ESP with either your mobile phone or computer to load the Webpage for animation selection and control.
 
-Enhancements to come
+Enhancements to come.
+
+The LED Control webpage code is VERY basic for now as I'm concentrating on the Arduino Sketch file 1st. This file MUST be located inside a folder called 'data' as a sub-directory of your Arduino Project Folder. This is where the ESP32 sketch data upload plugin expects to find it. The ESP32 sketch data upload plugin will then upload it to the appropriate directory on your ESP32.
