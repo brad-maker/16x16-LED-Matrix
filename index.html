@@ -4,67 +4,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ESP32 Control</title>
-<style>
+    <style>
         body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
         button { padding: 15px 30px; margin: 10px; font-size: 16px; }
+        input[type="text"] { padding: 10px; font-size: 16px; width: 300px; }
     </style>
-
 </head>
 <body>
     <h1>LED Panel Control</h1>
-
+    
     <div>
-    <label for="brightness">Brightness:</label>
-    <input type="range" id="brightness" min="0" max="255" value="15" onchange="setBrightness(this.value)">
-    <span id="brightnessValue">15</span>
+        <label for="brightness">Brightness:</label>
+        <input type="range" id="brightness" min="0" max="255" value="15" onchange="setBrightness(this.value)">
+        <span id="brightnessValue">15</span>
     </div>
-<br>
-<br>
-<br>
+    <br>
+    <div>
+	<br>
+    </div>
+    <h4>Scrolling Text Options</h4>
+    </div>
+    <div>
+        <input type="text" id="scrollTextInput" placeholder="Enter text to scroll">
+    </div>
+	<br>
+    <div>
+        <label for="fontColor">Font Color:</label>
+        <input type="color" id="fontColor" value="#00FF00" onchange="setFontColor(this.value)">
+    </div>
+	<br>
+        <button onclick="setAnimation('scrollText')">Start Scrolling Text</button>
+    <div>
+	<br>
+        <label for="scrollSpeed">Scroll Speed:</label>
+	<br>
+        <input type="range" id="scrollSpeed" min="10" max="500" value="100" onchange="setScrollSpeed(this.value)">
+        <span id="scrollSpeedValue">100 ms</span>
+    </div>
+	
+<h3>Or Select Another Animation</h3>
+    <br>
+    <br>
     <button onclick="setAnimation('solidred')">Red Panel</button><br>
     <button onclick="setAnimation('solidgreen')">Green Panel</button><br>
     <button onclick="setAnimation('solidblue')">Blue Panel</button><br>
     <button onclick="setAnimation('arcadesprites')">Arcade Sprites</button><br>
-    <button onclick="setAnimation('rainbow')">Rainbow Effect</button><br>
-    <button onclick="setAnimation('fireEffect')">Fire Effect</button><br>
-    <button onclick="setAnimation('twinkle')">Twinkle Effect</button><br>
+    <button onclick="setAnimation('rainbow')">Rainbow</button><br>
+    <button onclick="setAnimation('fireEffect')">Fire</button><br>
+    <button onclick="setAnimation('twinkle')">Twinkles</button><br>
     <button onclick="setAnimation('colorwipe')">Colour Wipe</button><br>
-    <button onclick="setAnimation('plasma')">Plasma Effect</button><br>
+    <button onclick="setAnimation('plasma')">Plasma</button><br>
     <button onclick="setAnimation('bouncingball')">Bouncing Ball</button><br>
-    <button onclick="setAnimation('meteoreffect')">Meteor Effect</button><br>
-    <button onclick="setAnimation('waveeffect')">Wave Effect</button><br>
+    <button onclick="setAnimation('meteoreffect')">Meteors</button><br>
+    <button onclick="setAnimation('waveEffect')">Wave Effect</button><br>
     <button onclick="setAnimation('conwaysGameOfLife')">Game Of Life</button><br>
     <button onclick="setAnimation('fireworksEffect')">Fireworks</button><br>
     <button onclick="setAnimation('raineffect')">Rain</button><br>
     <button onclick="setAnimation('matrixCodeRain')">Matrix</button><br>
     <button onclick="setAnimation('rotatingLines')">Rotating Lines</button><br>
     <button onclick="setAnimation('circularSpin')">Circular Spin</button><br>
-
+    <button onclick="setAnimation('rippleEffect')">Ripple</button><br>
+    <button onclick="setAnimation('starfieldEffect')">Starfield</button><br>
+    <button onclick="setAnimation('kaleidoscopeEffect')">Kaleidoscope</button><br>
+    <button onclick="setAnimation('fractals')">Fractal Effect</button><br>
+    <button onclick="setAnimation('colourWaves')">Colour Waves</button><br>
+    <button onclick="setAnimation('lissajousCurves')">Lissajous Curves</button><br>
+    <button onclick="setAnimation('perlinNoisePattern')">Perlin Noise Pattern</button><br>
+    <button onclick="setAnimation('lavaLampEffect')">Lava Lamp</button><br>
+    <button onclick="setAnimation('mazeGeneratorEffect')">Maze Generator</button><br>
 
     <button onclick="powerOff()">Power Off</button><br>
 
-    <script>
+<script>
 
-        function setBrightness(value) {
+    function setBrightness(value) {
         document.getElementById('brightnessValue').innerText = value;
-            fetch(`/setBrightness?brightness=${value}`);
-        }
+        fetch(`/setBrightness?brightness=${value}`);
+    }
 
-        function setAnimation(animation) {
+    function setAnimation(animation) {
+        if (animation === 'scrollText') {
+            var text = document.getElementById('scrollTextInput').value;
+            fetch(`/updateScrollText?text=${encodeURIComponent(text)}`)
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                // After updating text, start the animation
+                return fetch(`/setAnimation?animation=scrollText`);
+            })
+            .then(response => response.text())
+            .then(data => alert(data))
+            .catch(error => console.error('Error:', error));
+        } else {
             fetch(`/setAnimation?animation=${animation}`)
                 .then(response => response.text())
                 .then(data => alert(data))
                 .catch(error => console.error('Error:', error));
         }
+    }
 
-        function powerOff() {
-            fetch('/poweroff')
-                .then(response => response.text())
-                .then(data => alert(data))
-                .catch(error => console.error('Error:', error));
-        }
-    
+    function setScrollSpeed(value) {
+        document.getElementById('scrollSpeedValue').innerText = value + " ms";
+        // Send the new speed to the ESP32
+        fetch(`/setScrollSpeed?speed=${value}`)
+            .then(response => response.text())
+            .then(data => console.log('Scroll speed updated:', data))
+            .catch(error => console.error('Error updating scroll speed:', error));
+    }
+
+    function setFontColor(color) {
+        fetch(`/setFontColor?color=${encodeURIComponent(color)}`)
+            .then(response => response.text())
+            .then(data => console.log('Font color updated:', data))
+            .catch(error => console.error('Error updating font color:', error));
+    }
+
+    function powerOff() {
+        fetch('/poweroff')
+            .then(response => response.text())
+            .then(data => alert(data))
+            .catch(error => console.error('Error:', error));
+    }
 </script>
+
 </body>
 </html>
-
