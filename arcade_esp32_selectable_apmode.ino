@@ -7,7 +7,7 @@
 #include <SPIFFS.h> //Includes Arduino File Storage function
 #include <FastLED.h> //Includes the FastLED Module for RGB light controls
 
-// Set your custom Access Point (AP) credentials
+// Set your custom WiFi Access Point (AP) credentials
 const char* ap_ssid = "16x16 LED Panel"; //ESP32 SSID when is Access Point Mode
 const char* ap_password = "12345678";  // Optional password, must be at least 8 characters
 
@@ -42,6 +42,7 @@ int currentAnimation = 0; // 0 indicates no animation
 bool animationChanged = false; // Track if the animation has changed
 
 String userText = "Hello World";  // Default text, declare this globally
+int scrollSpeed = 100; // Default speed in milliseconds
 
 // Function to stop the current animation and reset LEDs
 void stopAnimation() {
@@ -54,20 +55,37 @@ void stopCurrentAnimation();
 void handleSetAnimation();  // Function prototype
 void handleUpdateScrollText();
 
-// Helper function XY coordinates to LED index
-//uint16_t XY(uint8_t x, uint8_t y) {
-//  uint16_t i;
-//  if (y & 0x01) {
-// Odd rows run backwards
-//    uint8_t reverseX = (WIDTH - 1) - x;
-//    i = (y * WIDTH) + reverseX;
-//  } else {
-// Even rows run forwards
-//    i = (y * WIDTH) + x;
-//  }
-//  return i;
-//}
+//Function to set the text scroll speed
+void handleSetScrollSpeed() {
+  if (server.hasArg("speed")) {
+    scrollSpeed = server.arg("speed").toInt();
+    Serial.println("New scroll speed: " + String(scrollSpeed));
+    server.send(200, "text/plain", "Speed updated to " + String(scrollSpeed));
+  } else {
+    server.send(400, "text/plain", "Speed parameter missing");
+  }
+}
 
+CRGB textColor = CRGB::Green;  // Default color, declare this globally
+
+void handleSetFontColor() {
+    if (server.hasArg("color")) {
+        String colorStr = server.arg("color");
+        // Remove the '#' character if present
+        if (colorStr.startsWith("#")) {
+            colorStr = colorStr.substring(1);
+        }
+        // Convert hex string to long
+        long colorValue = strtol(colorStr.c_str(), NULL, 16);
+        textColor = CRGB(colorValue);
+        Serial.println("New font color: #" + colorStr);
+        server.send(200, "text/plain", "Font color updated to #" + colorStr);
+    } else {
+        server.send(400, "text/plain", "Color parameter missing");
+    }
+}
+
+// Helper function XY coordinates to LED index
 uint16_t XY(uint8_t x, uint8_t y) {
   uint16_t i;
 
@@ -82,16 +100,16 @@ uint16_t XY(uint8_t x, uint8_t y) {
   return i;
 }
 
+// Check if the animation has changed
 void loop() {
   server.handleClient(); // Handle web server requests
 
-  // Check if the animation has changed
   if (animationChanged) {
     stopAnimation(); // Stop the current animation
     animationChanged = false; // Reset the flag
   }
 
-  // Check the current animation and run it in a loop
+// Check the current animation and run it in a loop
   switch (currentAnimation) {
     case 1:
       fireEffect();
@@ -174,7 +192,7 @@ void loop() {
       mazeGeneratorEffect();
       break;
   case 28:
-    scrollText(userText);
+    scrollText();
     break;
     // Add more cases for other animations
     default:
@@ -255,13 +273,13 @@ void handleSetAnimation() {
   }
 }
 
+// Initialize Serial for debugging
 void setup() {
-  // Initialize Serial for debugging
   Serial.begin(115200);
   FastLED.setBrightness(255);
   delay(1000);  // Allow time for Serial Monitor to initialize
 
-  // Initialize SPIFFS
+  // Initialize SPIFFS - Serial Peripheral Interface Flash File System
   if (!SPIFFS.begin(true)) {  // The 'true' parameter formats the filesystem if necessary
     Serial.println("Failed to mount SPIFFS");
     return;
@@ -283,14 +301,16 @@ void setup() {
   Serial.print("AP IP address: ");
   Serial.println(IP);
 
-  // Define server routes
+// Define server routes
   server.on("/", handleRoot);
   server.on("/setAnimation", handleSetAnimation);  // Start animation
   server.on("/setBrightness", handleSetBrightness); // Set brightness
   server.on("/updateScrollText", handleUpdateScrollText);
+  server.on("/setScrollSpeed", handleSetScrollSpeed);
+  server.on("/setFontColor", handleSetFontColor);
   server.on("/poweroff", handlePowerOff); // Power Off
 
-  // Start the server
+// Start the server
   server.begin();
   Serial.println("Server started");
 }
@@ -330,6 +350,7 @@ void handleSetBrightness() {
   }
 }
 
+//Character Map for the Led Matrix
 void drawSimpleChar(int x, int y, char c, CRGB color) {
   const uint8_t font[][5] = {
     {0b000, 0b000, 0b000, 0b000, 0b000}, // Space
@@ -461,6 +482,7 @@ void drawSimpleChar(int x, int y, char c, CRGB color) {
   }
 }
 
+//Text update function for scolling text
 void handleUpdateScrollText() {
   if (server.hasArg("text")) {
     userText = server.arg("text");
@@ -473,36 +495,37 @@ void handleUpdateScrollText() {
   }
 }
 
-void scrollText(const String& text) {
-  int charWidth = 4;  // 3 pixels wide + 1 pixel space
-  int textWidth = text.length() * charWidth;
-  int offset = WIDTH;
+//Scrolling Text Function
+void scrollText() {
+    int charWidth = 4;  // 3 pixels wide + 1 pixel space
+    int textWidth = userText.length() * charWidth;
+    int offset = WIDTH;
 
-  while (currentAnimation == 28) {
-    FastLED.clear();
-    for (int i = 0; i < text.length(); i++) {
-      int x = offset + (i * charWidth);
-      if (x >= -3 && x < WIDTH) {
-        drawSimpleChar(x, 5, text[i], CRGB::Green);
-      }
-    }
-    FastLED.show();
-    
-    offset--;
-    if (offset < -textWidth) {
-      offset = WIDTH;
-    }
+    while (currentAnimation == 28) {  // Assuming 28 is the index for scrolling text
+        FastLED.clear();
+        for (int i = 0; i < userText.length(); i++) {
+            int x = offset + (i * charWidth);
+            if (x >= -3 && x < WIDTH) {
+                drawSimpleChar(x, 5, userText[i], textColor);  // Use textColor here
+            }
+        }
+        FastLED.show();
+        
+        offset--;
+        if (offset < -textWidth) {
+            offset = WIDTH;
+        }
 
-    // Non-blocking delay with animation change check
-    unsigned long startTime = millis();
-    while (millis() - startTime < 100) {  // Reduced delay for smoother scrolling
-      if (currentAnimation != 28) {
-        return;
-      }
-      server.handleClient();
-      delay(1);
+        // Non-blocking delay with animation change check
+        unsigned long startTime = millis();
+        while (millis() - startTime < scrollSpeed) {
+            if (currentAnimation != 28) {
+                return;  // Exit if animation has changed
+            }
+            server.handleClient();  // Handle any incoming web requests
+            delay(1);  // Small delay to prevent tight looping
+        }
     }
-  }
 }
 
 // Create the array of retro arcade characters and store it in Flash memory
@@ -2183,8 +2206,6 @@ const long Firebird11[] PROGMEM =
   0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000,
 
 };
-
-// Follows are the instruction steps for all the light functions you want to display.
 
 // Rainbow effect
 
