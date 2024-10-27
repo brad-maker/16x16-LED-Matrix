@@ -18,11 +18,11 @@ NOTE: You must use Arduino IDE version less than version 2.0 as the modules bein
 
 Modules include:
 
-#include <WiFi.h> //Includes the default Arduino WiFi Library
-#include <WebServer.h> //Includes the default Arduino WebServer
-#include <FS.h> //Includes the default Arduino File Server function
-#include <SPIFFS.h> //Includes Arduino File Storage function
-#include <FastLED.h> //Includes the FastLED Module for RGB light controls
+WiFi.h
+WebServer.h
+FS.h
+SPIFFS.h
+FastLED.h
 
 The Arcade Sprite Animation routine currently has around 40 different animations running in a loop so it can take a while to see all sprites.
 I am in the process of adding more and always tweaking the code for speed. The animations were built in a stop go style inside excel so
