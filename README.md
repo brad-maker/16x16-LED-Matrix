@@ -39,3 +39,8 @@ The LED Control webpage code is VERY basic for now as I'm concentrating on the A
 This file MUST be located inside a folder called 'data' as a sub-directory of your Arduino Project Folder. 
 
 This is where the ESP32 sketch data upload plugin expects to find it. The ESP32 sketch data upload plugin will then upload it to the appropriate directory on your ESP32.
+
+See the finished product in action here: https://youtu.be/e1y0VzniGp8 and here: https://youtu.be/0bC53ncdpsY
+
+Full construction journey here: https://www.aussiearcade.com/topic/96389-rgb-led-light-panel/#comment-1294442
+
