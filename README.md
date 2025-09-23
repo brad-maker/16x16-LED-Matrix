@@ -42,5 +42,5 @@ This is where the ESP32 sketch data upload plugin expects to find it. The ESP32 
 
 See the finished product in action here: https://youtu.be/e1y0VzniGp8 and here: https://youtu.be/0bC53ncdpsY
 
-Full construction journey here: https://www.aussiearcade.com/topic/96389-rgb-led-light-panel/#comment-1294442
+Full construction journey here: https://harmoniseit.com/rgb-led-light-panel-2/
 
