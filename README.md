@@ -12,7 +12,7 @@ I'm no programmer only ever doing small things with plenty of reading help. This
 
 This is my WIP 16 x 16 RGB LED MAtrix build I've done using an ESP32 WROOM Devlelopment Board
 
-The file currently includes 18 selectable Animation effects with break code for new selections. 
+The file currently includes 48 selectable Animation effects with break code for new selections PLUS a bunch of custom selectable visual effects and a text scolling feature
 
 NOTE: You must use Arduino IDE version less than version 2.0 as the modules being used have not been ported to the new format and when they have been are not complete. I'm currently using 1.8.19. You can have both versions installed side by side like I have
 
