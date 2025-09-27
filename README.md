@@ -1,6 +1,6 @@
 I'd seen a friends Pin2DMD display and was inspired to create my own from scratch but dedicated to Classic Arcade Games instead. Thus this project was born. I initially found a project at https://www.brainy-bits.com/post/making-an-arduino-animated-frame-with-256-rgb-leds and proceeded down this path. Unfortunately the quality and reliability of the strips and joins were not good and I was constantly dealing with poor connections. I could have soldered the joins but thats a LOT of work and my soldering skills are awful!
 
-The result was a working version that was more than a little touchy. I'd also used a Mega 2560 DEV Board and my original sprite animation filled the limited memory VERY quickly not giving me a lot of room to move so to speak. Enter some ESP32 Dev Baords with 4 times the capacity along with integrate WiFi and Buetooth. Coupling these with a now readily available pre-built 16 x 16 LED Matrix panels, I revisited this project with a more power and more flexibility.
+The result was a working version that was more than a little touchy. I'd also used a Mega 2560 DEV Board and my original sprite animation filled the limited memory VERY quickly not giving me a lot of room to move so to speak. Enter some ESP32 Dev Boards with 4 times the capacity along with integrated WiFi and Bluetooth. Coupling these with a now readily available pre-built 16 x 16 LED Matrix panels, I revisited this project with more power and flexibility.
 
 I'm no programmer only ever doing small things with plenty of reading help. This code is roughly now made up of:
 
@@ -10,9 +10,9 @@ I'm no programmer only ever doing small things with plenty of reading help. This
 
 38% ChatGPT Code
 
-This is my WIP 16 x 16 RGB LED MAtrix build I've done using an ESP32 WROOM Devlelopment Board
+This is my WIP 16 x 16 RGB LED Matrix build I've done using an ESP32 WROOM Devlelopment Board
 
-The file currently includes 48 selectable Animation effects with break code for new selections PLUS a bunch of custom selectable visual effects and a text scolling feature
+The file currently includes 48 selectable Animation effects with break code for new selections PLUS a bunch of custom selectable visual effects and a text scolling feature. This is all controlled from a HTML file front-end accessed by connecting your phone or computer to the webserver on the ESP32.
 
 NOTE: You must use Arduino IDE version less than version 2.0 as the modules being used have not been ported to the new format and when they have been are not complete. I'm currently using 1.8.19. You can have both versions installed side by side like I have
 
